@@ -1,4 +1,4 @@
-# BTES - Booking Tickets Events System7
+# BTES - Booking Tickets Events System8
 
 BTES (Booking Tickets Events System) is a web-based application designed to allow users to easily view, search, and book tickets for various events. It provides a user-friendly interface for managing event bookings and includes features like refunds, payment processing, and admin event management.
 
