@@ -92,22 +92,25 @@ py manage.py createsuperuser
 
 Follow these steps to contribute to the project:
 
-### 1. Fork the Repository
+### 1. Fork the Repository 
 
 - First, click on **Fork** in the top-right corner to create a copy of the repository under your GitHub account.
+  prefer with same name BTES.
 
 ### 2. Clone the Repository
 
 - Clone your forked repository to your local machine by running the following command:
   ```bash
+  cd desktop
+  ```
+  ```bash
   git clone https://github.com/mmsbah191/BTES.git
   ```
-
 ### 3. Navigate to the Project Directory
 
 - Move into the project directory:
   ```bash
-  cd path/Btes
+  cd BTES
   ```
 
 ### 4. Set Upstream to Original Repository
@@ -117,12 +120,31 @@ Follow these steps to contribute to the project:
   git remote add upstream https://github.com/mmsbah191/BTES.git
   ```
 
-### 5. Create a New Branch
+### 4. Or Set Upstream to your forkes Repository
 
-- Create a new branch to work on a specific feature or fix:
+- To keep your forked repository in sync with the original, add the original repository as the upstream remote:
   ```bash
-  git checkout -b feature/YourFeatureName
+  git remote add origin https://github.com/!!usernamegithup!!/BTES.git
   ```
+
+
+### 5. First command before push updates to github
+  ```bash
+  git branch -m main
+  ```
+  ```bash
+  git config --global user.name "yourName"
+  ```bash
+   git config --global user.email "yourMail"
+  ```
+  ```bash
+  git pull origin main --allow-unrelated-histories
+  ```
+- for varity GitHub:
+  ```bash
+  git push -u origin main
+  ```
+
 
 ### 6. Start Coding
 
@@ -146,10 +168,10 @@ Follow these steps to contribute to the project:
 
 - Push your changes to the branch on your forked GitHub repository:
   ```bash
-  git push origin feature/YourFeatureName
+  git push -u origin main
   ```
 
-### 9. Pull Updates from the Original Repository (Upstream)
+### 9.if you want Pull Updates from the Original Repository (Upstream)
 
 - Before submitting a pull request, make sure your branch is up-to-date with the original repository by fetching and merging any changes:
   ```bash
@@ -157,13 +179,8 @@ Follow these steps to contribute to the project:
   git checkout main
   git merge upstream/main
   ```
-- Then, rebase your feature branch on the updated `main` branch to avoid conflicts:
-  ```bash
-  git checkout feature/YourFeatureName
-  git rebase main
-  ```
 
-### 10. Submit a Pull Request
+### 10. Submit a Pull Request from sync from your repostiry forked 
 
 - After pushing all your changes, go to your forked repository on GitHub, and you’ll see an option to submit a pull request (PR). Follow the prompts to create the PR to the original repository’s main branch.
 
