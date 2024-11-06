@@ -6,6 +6,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BTES Events</title>
+    <script src="{% static 'js/cart.js' %}"></script>
+
     <style>
       * {
         padding: 0;
@@ -205,17 +207,19 @@
         <h2>{{ event.title }}</h2>
         <h2>{{ event.price }}</h2>
         <p>{{ event.date }}</p>
-        <form action="{% url 'add_to_cart' event.id %}">
-          <button class="add-to-cart-btn" data-ticket-id="{{ event.id }}">
-            Add to Cart
-          </button>
+        <form action="{% url 'delete_event' event.id %}">
+        <button class="delete-from-db" type="submit" data-ticket-id="{{ event.id }}">
         </form>
-        <form action="{% url 'event_details' event.id %}">
-          <button>details</button>
-        </form>
+          Delete
+        </button>
+        <form action="{% url 'edit_event' event.id %}">
+        <button class="edit-from-db" type="submit" data-ticket-id="{{ event.id }}">Edit</button>
+    </form>
       </div>
       {% endfor %}
     </main>
-    <script src="{% static 'js/addCart.js' %}"></script>
   </body>
 </html>
+
+<script src="{% static 'js/cart.js' %}"></script>
+

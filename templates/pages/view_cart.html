@@ -188,34 +188,14 @@
     </header>
 
     <main id="events-Main">
-      <!-- <div class="event-card">
-        <img src="imgages\realmadrid.jpeg" alt="Event Image" />
-        <h2>Match: Real Madrid</h2>
-        <p>Sun, 23 Nov 2024</p>
-        <button>Add to Cart</button>
-        <button>Book Ticket Now</button>
-      </div> -->
-      {% for event in events %}
-      <div class="event-card">
-        <img
-          src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
-          alt="{{ event.name }}"
-        />
-
-        <h2>{{ event.title }}</h2>
-        <h2>{{ event.price }}</h2>
-        <p>{{ event.date }}</p>
-        <form action="{% url 'add_to_cart' event.id %}">
-          <button class="add-to-cart-btn" data-ticket-id="{{ event.id }}">
-            Add to Cart
-          </button>
-        </form>
-        <form action="{% url 'event_details' event.id %}">
-          <button>details</button>
-        </form>
-      </div>
-      {% endfor %}
+      <h1>Your Cart</h1>
+      <ul>
+        {% for item in cart.items.all %}
+        <li>{{ item.title }} - ${{ item.price }}</li>
+        {% endfor %}
+      </ul>
+      <p>Total: ${{ cart.total_price }}</p>
+      <a href="{% url 'checkout' %}">Proceed to Checkout</a>
     </main>
-    <script src="{% static 'js/addCart.js' %}"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import (Event, Payment, PublisherProfile, RefundRequest,
+from .models import (Cart, Event, Payment, PublisherProfile, RefundRequest,
                      SiteAdminProfile, Ticket, User)
 
 
@@ -39,8 +39,8 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['title', 'description',"image", 'date', 'time', 'location', 'price', 'available_tickets']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
-            'time': forms.TimeInput(attrs={'type': 'time'}),
+            'date': forms.DateInput(attrs={'type': 'date', 'lang': 'en'}),
+            'time': forms.TimeInput(attrs={'type': 'time', 'lang': 'en'}),
         }
         
 
@@ -58,3 +58,9 @@ class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
         fields = ['ticket', 'amount', 'payment_method']
+
+
+class CartForm(forms.ModelForm):
+    class Meta:
+        model = Cart
+        fields = ['items']

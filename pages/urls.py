@@ -9,6 +9,8 @@ urlpatterns = [
     path("", views.link_list, name="link_list"),  # رابط لعرض الروابط
     path("create_event/", views.create_event, name="create_event"),
     path("create_ticket/", views.create_ticket, name="create_ticket"),
+    path("create_payment/<int:event_id>/", views.create_payment, name="create_payment"),
+    path("event_details/<int:event_id>/", views.event_details, name="event_details"),
     path(
         "create_refund_request/",
         views.create_refund_request,
@@ -17,5 +19,8 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login/", views.login_view, name="login_view"),
     path("logout/", views.logout_view, name="logout"),
-    path("create_payment/", views.create_payment, name="create_payment"),
+    # path("create_payment/", views.create_payment, name="create_payment"),
+    path('add_to_cart/<int:event_id>/', views.add_to_cart, name='add_to_cart'),
+       path('delete_event/<int:event_id>/', views.delete_event, name='delete_event'),
+    path('edit_event/<int:event_id>/', views.edit_event, name='edit_event'),
 ]

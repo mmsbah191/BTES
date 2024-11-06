@@ -4,13 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-# views.py
-from django.shortcuts import HttpResponse, redirect, render
+from django.http import JsonResponse
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .forms import (EventForm, LoginForm, PaymentForm, ProfileImageForm,
                     RefundRequestForm, TicketForm, UserForm)
-from .models import Event, User
+from .models import Cart, Event, Ticket, User
 
 
 # Create your views here.
@@ -20,6 +20,8 @@ def index(request):
 
 def home(request):
     events = Event.objects.all()
+    if str(request.user)!='AnonymousUser' and request.user.role == "publisher":
+        return render(request, "pages/home_delete.html", {"events": events})
     return render(request, "pages/home.html", {"events": events})
 
 
@@ -40,9 +42,8 @@ def create_event(request):
     return render(request, "pages/create_event.html", {"form": form})
 
 
-@login_required
 def create_ticket(request):
-    if not request.user.role == "publisher":
+    if str(request.user)!='AnonymousUser' and not request.user.role == "publisher":
         return HttpResponse("not authorized you must be publisher for create_ticket")
 
     if request.method == "POST":
@@ -55,9 +56,14 @@ def create_ticket(request):
     return render(request, "pages/create_ticket.html", {"form": form})
 
 
-@login_required
+
+def event_details(request,event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, "pages/event_details.html", {"event": event})
+
+
 def create_refund_request(request):
-    if not request.user.role == "publisher":
+    if str(request.user)!='AnonymousUser' and request.user.role == "publisher":
         return HttpResponse(
             "not authorized you must be publisher for create_refund_request"
         )
@@ -143,7 +149,7 @@ def update_profile_image(request):
         if form.is_valid():
             user = form.save(commit=False)  # Don't save yet
             if not request.FILES.get("profile_image"):  # If no image uploaded
-                user.profile_image = "static/images/profile.png"  # Set to default image
+                user.profile_image = "images/profile.png"  # Set to default image
             user.save()
             return redirect("home")
     else:
@@ -156,9 +162,8 @@ def logout_view(request):
     return redirect("home")
 
 
-@login_required
-def create_payment(request):
-    if not request.user.role == "publisher":
+def create_payment(request,event_pk):
+    if str(request.user)!='AnonymousUser' and request.user.role == "publisher":
         return HttpResponse("not authorized you must be publisher for create_payment")
     if request.method == "POST":
         form = PaymentForm(request.POST)
@@ -168,6 +173,52 @@ def create_payment(request):
     else:
         form = PaymentForm()
     return render(request, "pages/create_payment.html", {"form": form})
+
+# @login_required
+# def create_payment(request):
+#     if not request.user.role == "publisher":
+#         return HttpResponse("not authorized you must be publisher for create_payment")
+#     if request.method == "POST":
+#         form = PaymentForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("create_payment")
+#     else:
+#         form = PaymentForm()
+#     return render(request, "pages/create_payment.html", {"form": form})
+
+
+@login_required
+def add_to_cart(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart.items.add(ticket)
+    
+    return JsonResponse({
+        'success': True,
+        'cart_count': cart.items.count()
+    })
+    
+    
+@login_required
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == "DELETE":
+        event.delete()
+        return JsonResponse({'success': True}, status=200)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def edit_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        form = EventForm(request.POST,request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  
+    else:
+        form = EventForm(instance=event)
+    return render(request, 'pages/edit_event.html', {'form': form})
 
 
 def link_list(request):
@@ -184,3 +235,5 @@ def link_list(request):
         {"name": "Create Payment", "url": reverse("create_payment")},
     ]
     return render(request, "pages/link_list.html", {"links": links})
+
+

@@ -44,13 +44,13 @@ class SiteAdminProfile(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True,null=True)
     image = models.ImageField(upload_to="event_images/",blank=True, null=True)
-    date = models.DateField()
-    time = models.TimeField()
+    date = models.DateField(default="2024-12-06")
+    time = models.TimeField(default="20:45:00")
     location = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    available_tickets = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2,default=100)
+    available_tickets = models.IntegerField(default=50)
 
     def __str__(self):
         return self.title
@@ -119,3 +119,14 @@ class Payment(models.Model):
         return f"Payment for {self.ticket}"
 
 
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Ticket)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def total_price(self):
+        return sum(item.price for item in self.items.all())
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
