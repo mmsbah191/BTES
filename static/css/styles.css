@@ -1,0 +1,42 @@
+/* ملف styles.css */
+
+body {
+    font-family: Arial, sans-serif; /* تغيير خط النص */
+    background-color: #f4f4f4; /* لون خلفية لطيف */
+    display: flex;
+    justify-content: center; /* توسيط العناصر أفقياً */
+    align-items: center; /* توسيط العناصر عمودياً */
+    height: 100vh; /* جعل ارتفاع الصفحة 100% من النافذة */
+    margin: 0; /* إزالة الهوامش الافتراضية */
+}
+
+.container {
+    background-color: white; /* خلفية للنموذج */
+    padding: 20px; /* حشو حول المحتوى */
+    border-radius: 10px; /* زوايا مستديرة */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* ظل للنموذج */
+    width: 300px; /* عرض محدد للنموذج */
+}
+
+h1 {
+    text-align: center; /* توسيط عنوان النموذج */
+    color: #333; /* لون النص */
+}
+
+form p {
+    margin: 15px 0; /* مسافة بين الحقول */
+}
+
+button {
+    width: 100%; /* جعل الزر يستحوذ على العرض بالكامل */
+    padding: 10px; /* حشو داخلي للزر */
+    background-color: #28a745; /* لون الخلفية للزر */
+    color: white; /* لون النص داخل الزر */
+    border: none; /* إزالة الحدود الافتراضية */
+    border-radius: 5px; /* زوايا مستديرة للزر */
+    cursor: pointer; /* تغيير شكل المؤشر عند التمرير فوق الزر */
+}
+
+button:hover {
+    background-color: #218838; /* تغيير لون الخلفية عند التمرير فوق الزر */
+}

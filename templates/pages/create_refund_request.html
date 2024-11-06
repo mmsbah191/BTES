@@ -3,8 +3,8 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>إنشاء طلب استرداد</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- استيراد ملف CSS -->
+    <title>create refund request</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> 
     
     <style>
         #id_ticket{
@@ -13,8 +13,8 @@
     </style>
 </head>
 <body>
-    <div class="container">  <!-- إضافة div لتوسيع العناصر -->
-        <h1>إنشاء طلب استرداد جديد</h1>
+    <div class="container">  
+        <h1>create refund request</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}  <!-- عرض النموذج كفقاعات -->

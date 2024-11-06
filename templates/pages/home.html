@@ -1,0 +1,211 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BTES Events</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: system-ui;
+        box-sizing: border-box;
+      }
+      body {
+        background: linear-gradient(to right, #e0e68d, #f0e61d);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background-color: #a9ab8d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 10%;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
+      header ul {
+        display: flex;
+        list-style: none;
+      }
+      header ul li {
+        margin-left: 20px;
+      }
+      a {
+        color: aliceblue;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      header ul li a:hover,
+      #logo:hover {
+        color: #390438;
+        background: rgb(252, 253, 254);
+        padding: 6px 12px;
+        border-radius: 8px;
+      }
+      #logo {
+        font-size: 24px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+      }
+
+      /* تصميم الملف الشخصي والقائمة المنسدلة */
+      .profile-menu {
+        position: relative;
+      }
+
+      .profile-icon {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+      }
+
+      .dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .dropdown li {
+        list-style: none;
+      }
+
+      .dropdown li a {
+        display: block;
+        padding: 10px 15px;
+        color: #333;
+        text-decoration: none;
+      }
+
+      .dropdown li a:hover {
+        background-color: #f0f0f0;
+      }
+      main {
+        margin-top: 80px;
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .event-card {
+        width: 250px;
+        margin: 15px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+      .event-card img {
+        width: 100%;
+        border-radius: 8px;
+      }
+      .event-card h2 {
+        font-size: 1.2em;
+        color: #333;
+        margin: 10px 0;
+      }
+      .event-card p {
+        color: #666;
+        font-size: 0.9em;
+      }
+      .event-card button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 0.9em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #a9ab8d;
+        color: #fff;
+      }
+      .event-card button:hover {
+        background-color: #555;
+      }
+      .event-card:hover {
+        transform: translateY(-10px);
+      }
+    </style>
+    <script src="{% static 'js/home.js' %}"></script>
+  </head>
+  <body>
+    <header>
+      <h2><a href="{% url 'home' %}" id="logo">BTES</a></h2>
+      <nav>
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="#">Pending</a></li>
+          <li><a href="#">Booking</a></li>
+          <li><a href="#">List</a></li>
+          
+
+          {% if user.is_authenticated %}
+          <!-- قائمة الملف الشخصي -->
+          <li class="profile-menu">
+            <a href="#" id="profile-toggle">
+              <img
+                id="profile"
+                src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
+
+                alt="Profile"
+                class="profile-icon"
+              />
+              <span> {% if user.is_authenticated %} {{ user.username }} {% endif %} </span>
+            </a>
+            <ul class="dropdown" id="profile-dropdown">
+              <li>
+                <a href="{% url 'update_profile_image' %}">Change Picture</a>
+              </li>
+              <li><a href="#">Settings</a></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </li>
+          {% else%}
+          <li><a href="{% url 'login_view' %}">Login</a></li>
+          {% endif %}
+
+        </ul>
+      </nav>
+    </header>
+
+    <main id="events-Main">
+      <!-- Example of event card, replace with dynamic Django data -->
+      <!-- <div class="event-card">
+        <img src="imgages\realmadrid.jpeg" alt="Event Image" />
+        <h2>Match: Real Madrid</h2>
+        <p>Sun, 23 Nov 2024</p>
+        <button>Add to Cart</button>
+        <button>Book Ticket Now</button>
+      </div> -->
+
+      {% for event in events %}
+      <div class="event-card">
+        <img 
+        src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
+        alt="{{ event.name }}" />
+    
+        <h2>{{ event.name }}</h2>
+        <h2>{{ event.price }}</h2>
+        <p>{{ event.date }}</p>
+        <button>Add to Cart</button>
+        <button>Book Ticket Now</button>
+      </div>
+      {% endfor %}
+    </main>
+  </body>
+</html>

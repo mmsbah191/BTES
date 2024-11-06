@@ -3,16 +3,16 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>إنشاء حدث</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- استيراد ملف CSS -->
+    <title>create_event</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> 
 </head>
 <body>
-    <div class="container">  <!-- إضافة div لتوسيع العناصر -->
-        <h1>إنشاء حدث جديد</h1>
-        <form method="post">
+    <div class="container"> 
+        <h1>create_event</h1>
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}  <!-- عرض النموذج كفقاعات -->
-            <button type="submit">إنشاء حدث</button>
+            <button type="submit">Create event</button>
         </form>
     </div>
 </body>

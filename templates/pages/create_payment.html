@@ -3,9 +3,9 @@
 <html lang="ar">
   <head>
     <meta charset="UTF-8" />
-    <title>إنشاء دفع جديد</title>
+    <title>create payment</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <!-- استيراد ملف CSS -->
+   
 
     <style>
       #id_ticket {
@@ -15,8 +15,7 @@
   </head>
   <body>
     <div class="container">
-      <!-- إضافة div لتوسيع العناصر -->
-      <h1>إنشاء دفع جديد</h1>
+      <h1>create payment</h1>
       <form method="post">
         {% csrf_token %} {{ form.as_p }}
         <!-- عرض النموذج كفقاعات -->

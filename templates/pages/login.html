@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <style>
+      p{
+        text-align: center;
+        align-items: center;
+        padding: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+      <br>
+      {% if error %}
+      <p style="color: red">{{ error }}</p>
+      {% endif %}
+      <form method="POST" action="{% url 'login_view' %}">
+        {% csrf_token %} {{ form.as_p }}
+        <!-- This will render the form fields as paragraphs -->
+
+        <button type="submit">Login</button>
+      </form>
+      <p>if you want <a href="{% url 'signup' %}">Signin</a></p>
+      <p>but you can booking without signup <a href="{% url 'home' %}">Home</a></p>
+
+    </div>
+  </body>
+</html>
