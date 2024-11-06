@@ -33,21 +33,23 @@ def create_ticket(request):
         if form.is_valid():
             form.save()
             return redirect('create_ticket')  
+    else:
         form = TicketForm()
     return render(request, 'pages/create_ticket.html', {'form': form})
+
+
 
 def create_refund_request(request):
     if request.method == 'POST':
         form = RefundRequestForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('create_refund_request') 
+            return redirect('create_refund_request')  
+    else:
         form = RefundRequestForm()
     return render(request, 'pages/create_refund_request.html', {'form': form})
 
 
-
-# دالة لإنشاء مستخدم جديد
 def create_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -58,7 +60,6 @@ def create_user(request):
         form = UserForm()
     return render(request, 'pages/create_user.html', {'form': form})
 
-# دالة لإنشاء دفع جديد
 def create_payment(request):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
