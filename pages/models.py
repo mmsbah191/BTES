@@ -42,7 +42,7 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"Ticket for {self.event.title} - Quantity: {self.quantity} - Purchased by {self.user.username} on {self.purchase_date}"
-
+    
 class RefundRequest(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     request_date = models.DateTimeField(auto_now_add=True)
@@ -59,8 +59,8 @@ class RefundRequest(models.Model):
     #         raise ValueError("Ticket is already cancelled.")
             # self.is_refunded = False
 
-    def __str__(self):
-        return f"Ticket for {self.event.title} by {self.user.username} (Status: {self.status})"
+    # def __str__(self):
+        # return f"Ticket for {self.event.title} by {self.user.username} (Status: {self.status})"
     def __str__(self):
         return f'Refund request for {self.ticket}'
 
