@@ -206,7 +206,7 @@ git push -u origin main
 ## Contributors
 
 - **Mohamed Mesbah Ibrahim**
-- **Mai Mokhtar Al-Galayi**
+- **May moktar algallai**
 
 ## Acknowledgments
 
