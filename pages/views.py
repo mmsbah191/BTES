@@ -196,12 +196,13 @@ def payment_confirmation(request, payment_id):
         payment = Payment.objects.get(id=payment_id)
         if request.method == 'POST':
             payment.payment_status = "completed"
-            payment.process_payment()  # خصم التذاكر
-            return redirect('success_page')  # إعادة التوجيه إلى صفحة النجاح
-        return render(request, 'payment_confirmation.html', {'payment': payment})
+            payment.process_payment()
+            return HttpResponse("Payment is not completed yet.")#here API Third party
+            return redirect('payment_confirmation') #todo
+        return render(request, 'pages/payment_confirmation.html', {'payment': payment})
 
     except Payment.DoesNotExist:
-        return JsonResponse({"success": False, "error": "Payment not found"})
+        return JsonResponse({"success": False, "error": "Payment not found"})#todo
     
 @login_required # regular user only can make direct payment
 def checkout_card(request): 
@@ -223,25 +224,25 @@ def booking(request):#checkout
     return render(request, 'cart/checkout.html', {'cart': cart})
     
 
-@login_required
-def add_to_cart(request, event_id):
-    event = Event.objects.get(id=event_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart.items.add(event)
-    return redirect('home')
 
 @login_required
 def add_to_cart(request, event_id):  # Use event_id instead of ticket_id
     if request.method == 'POST' and request.user.is_authenticated:
-        try:
             event = Event.objects.get(pk=event_id)  # Fetch by event_id
             cart, created = Cart.objects.get_or_create(user=request.user)
             cart.items.add(event)
             cart.save()
-            return JsonResponse({"success": True, "cart_count": cart.items.count()})
-        except Event.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Event not found"})
-    return JsonResponse({"success": False, "error": "Invalid request"})
+    return redirect('home')
+
+
+def delete_from_cart(request, event_id):
+    if request.method == 'POST':
+        cart = get_object_or_404(Cart, user=request.user)
+        event = get_object_or_404(Event, id=event_id)
+        cart.items.remove(event)  # احذف العنصر من السلة
+        cart.save()
+    return redirect('cart') 
+
 
 @login_required
 def view_cart(request):

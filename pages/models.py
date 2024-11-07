@@ -12,16 +12,18 @@ class User(AbstractUser):
         choices=[
             ("regular", "Regular User"),
             ("publisher", "Publisher"),
+            ("admin", "Admin"),
         ],
         default="regular",
     )  # A field to specify the user role
     # profile_image = models.ImageField(
     #     upload_to="profile/", default="images/profile.png", blank=True
     # )
-    
+
     def get_profile_image_path(instance, filename):
         extension = os.path.splitext(filename)[1]
         return f"profile{extension}"
+
     profile_image = models.ImageField(
         upload_to=get_profile_image_path, default="profile.png", blank=True
     )
@@ -43,21 +45,24 @@ class SiteAdminProfile(models.Model):
     admin_permissions = models.TextField()  # Define special permissions if needed
 
 
+import math
+
+math.sqrt
+
+
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True,null=True)
-    image = models.ImageField(upload_to="event_images/",blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to="event_images/", blank=True, null=True)
     date = models.DateField(default="2024-12-06")
     time = models.TimeField(default="20:45:00")
     location = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2,default=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=100)
     available_tickets = models.IntegerField(default=50)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} {self.description[:30]}..."
 
-    def __str__(self):
-        return f"{self.title} {self.description}"
 
 class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -78,8 +83,8 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"Ticket for {self.event.title} - Purchased by {self.user.username}"
- 
-    
+
+
 class Payment(models.Model):
     tickets = models.ManyToManyField(Ticket)  # الدفع قد يتضمن عدة تذاكر
     payment_date = models.DateTimeField(auto_now_add=True)  # تاريخ الدفع
@@ -90,44 +95,56 @@ class Payment(models.Model):
     )  # وسائل الدفع
     payment_status = models.CharField(
         max_length=50,
-        choices=[("pending", "Pending"), ("completed", "Completed"), ("failed", "Failed")],
+        choices=[
+            ("pending", "Pending"),
+            ("completed", "Completed"),
+            ("failed", "Failed"),
+        ],
         default="pending",
     )  # حالة الدفع
-    transaction_id = models.CharField(max_length=255, blank=True, null=True)  # معرف المعاملة الخارجية
-    total_tickets = models.IntegerField(default=0)  # إجمالي التذاكر المخصومة (للإشارة إلى عدد التذاكر)
-    
+    transaction_id = models.CharField(
+        max_length=255, blank=True, null=True
+    )  # معرف المعاملة الخارجية
+    total_tickets = models.IntegerField(
+        default=0
+    )  # إجمالي التذاكر المخصومة (للإشارة إلى عدد التذاكر)
+
     # منطق خصم التذاكر
     def process_payment(self):
         if self.payment_status != "completed":
-            return HttpResponse("Payment is not completed yet.")
             raise ValueError("Payment is not completed yet.")
 
         total_deducted = 0
         for ticket in self.tickets.all():
             if ticket.event.available_tickets >= ticket.quantity:
-                ticket.event.available_tickets -= ticket.quantity  # خصم التذاكر من الحدث
+                ticket.event.available_tickets -= (
+                    ticket.quantity
+                )  # خصم التذاكر من الحدث
                 ticket.save()
                 total_deducted += ticket.quantity
             else:
                 return HttpResponse("Payment is not completed yet.")
-                raise ValueError(f"Not enough tickets available for the event: {ticket.event.title}")
+                raise ValueError(
+                    f"Not enough tickets available for the event: {ticket.event.title}"
+                )
 
         self.total_tickets = total_deducted  # تسجيل عدد التذاكر المخصومة
         self.save()  # حفظ الدفع بعد معالجة الخصم
-    
+
     def __str__(self):
         return f"Payment for {self.total_tickets} tickets on {self.payment_date} via {self.payment_method}"
-
-
 
 
 class RefundRequest(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     request_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
-        max_length=20, choices=[("active", "Active"), ("cancelled", "Cancelled")]
-    )
+    max_length=20,
+    choices=[("active", "Active"), ("cancelled", "Cancelled"), ("completed", "Completed")],
+)
     credit_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+#process_refund func to give points
 
     # def cancel_ticket(self):
     #     if self.status == 'active':
@@ -145,11 +162,9 @@ class RefundRequest(models.Model):
         return f"Refund request for {self.ticket}"
 
 
-
-
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    items = models.ManyToManyField(Event)  
+    items = models.ManyToManyField(Event)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

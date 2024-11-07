@@ -1,19 +1,28 @@
-<!-- checkout_event.html -->
+{% load static%}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - {{ event.title }}</title>
-</head>
-<body>
-    <h1>Checkout for {{ event.title }}</h1>
-    <p>Price: {{ event.price }} USD</p>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <title>create_event</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Checkout for {{ event.title }}</h1>
+      <p>Price: {{ event.price }} USD</p>
+      <form method="POST">
+        {% csrf_token %} {{ form.as_p }} {% if form.non_field_errors %}
+        <div class="error">
+          <ul>
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Proceed to Payment</button>
-    </form>
-</body>
+        <button type="submit" class="btn-submit">المتابعة إلى الدفع</button>
+      </form>
+    </div>
+  </body>
 </html>

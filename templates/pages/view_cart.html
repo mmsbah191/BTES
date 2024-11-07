@@ -100,6 +100,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        margin-bottom: 80px;
       }
       .event-card {
         display: flex;
@@ -221,8 +222,9 @@
         </ul>
       </nav>
     </header>
+
     <main id="events-Main">
-      <h1>Your Cart</h1>
+      <h1 style="display: block; width: 100%; text-align: center;">Your Cart</h1>
 
       {% for event in cart.items.all %}
       <div class="event-card">
@@ -233,20 +235,23 @@
         <h2>{{ event.title }}</h2>
         <h2>${{ event.price }}</h2>
         <p>{{ event.date }}</p>
-        <button class="delete-to-cart-btn" data-event-id="{{ event.id }}">
-          Add to Cart
-        </button>
+        <form action="{% url 'delete_from_cart' event.id %}" method="post">
+          <button>
+            Delelte from Cart
+          </button>
+        </form>
+       
         <form action="{% url 'checkout_event' event.id %}" method="post">
           {% csrf_token %}
-          <button type="submit">Checkout Event</button>
+          <button type="submit">Booking Event Now</button>
         </form>
       </div>
       {% endfor %}
 
       <div class="cart-summary">
         <h4>Total: ${{ cart.total_price }}</h4>
-        <a href="{% url 'checkout_card' %}" class="booking-button"
-          >Proceed to events</a
+        <a href="{% url 'checkout_card' %}"
+          >Booking events</a
         >
       </div>
     </main>

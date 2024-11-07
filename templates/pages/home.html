@@ -207,8 +207,10 @@
         <h2>{{ event.price }}</h2>
         <p>{{ event.date }}</p>
         <!-- هنا نحتاج إضاقة js   تعمل مع او بدون حسب برمجتك وتعديلاتك لكن تحتاج-->
-        <form action="{% url 'add_to_cart' event.id %}">
-          <button class="add-to-cart-btn" data-ticket-id="{{ event.id }}">
+        <form action="{% url 'add_to_cart' event.id %}" method="post">
+          {% csrf_token %}
+
+          <button>
             Add to Cart
           </button>
         </form>
@@ -216,8 +218,9 @@
           {% csrf_token %}
           <button type="submit">Booking Event</button>
       </form>
-        <form action="{% url 'event_details' event.id %}">
-          <button type="submit">details</button>
+        <form action="{% url 'event_details' event.id %}" method="post">
+          {% csrf_token %}
+          <button>details</button>
         </form>
       </div>
       {% endfor %}
