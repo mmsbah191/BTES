@@ -146,6 +146,41 @@
         transform: translateY(-10px);
       }
     </style>
+
+    <style>
+      /* تنسيقات الشريط الثابت */
+      .cart-summary {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #a9ab8d;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+        color: #fff;
+      }
+
+      .cart-summary h4 {
+        font-size: 1.2em;
+        margin: 0;
+      }
+
+      .booking-button {
+        padding: 10px 20px;
+        background-color: #edd70d;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+      }
+
+      .booking-button:hover {
+        background-color: #555;
+      }
+    </style>
     <script src="{% static 'js/home.js' %}"></script>
   </head>
   <body>
@@ -186,16 +221,34 @@
         </ul>
       </nav>
     </header>
-
     <main id="events-Main">
       <h1>Your Cart</h1>
-      <ul>
-        {% for item in cart.items.all %}
-        <li>{{ item.title }} - ${{ item.price }}</li>
-        {% endfor %}
-      </ul>
-      <p>Total: ${{ cart.total_price }}</p>
-      <a href="{% url 'checkout' %}">Proceed to Checkout</a>
+
+      {% for event in cart.items.all %}
+      <div class="event-card">
+        <img
+          src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
+          alt="{{ event.name }}"
+        />
+        <h2>{{ event.title }}</h2>
+        <h2>${{ event.price }}</h2>
+        <p>{{ event.date }}</p>
+        <button class="delete-to-cart-btn" data-event-id="{{ event.id }}">
+          Add to Cart
+        </button>
+        <form action="{% url 'checkout_event' event.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Checkout Event</button>
+        </form>
+      </div>
+      {% endfor %}
+
+      <div class="cart-summary">
+        <h4>Total: ${{ cart.total_price }}</h4>
+        <a href="{% url 'checkout_card' %}" class="booking-button"
+          >Proceed to events</a
+        >
+      </div>
     </main>
   </body>
 </html>

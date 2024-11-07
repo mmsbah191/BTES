@@ -101,7 +101,7 @@ def signup(request):
             return render(
                 request,
                 "pages/signup.html",
-                {"error": "choose another username.", "form": form},
+                {"error": "error", "form": form},
             )
 
     else:
@@ -135,7 +135,7 @@ def login_view(request):
                 return render(
                     request,
                     "pages/login.html",
-                    {"form": form, "error": "Invalid username or password."},
+                    {"form": form, "error": "error"},
                 )
     else:
         form = LoginForm()
@@ -161,9 +161,9 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
-
-def create_payment(request,event_pk):
-    if str(request.user)!='AnonymousUser' and request.user.role == "publisher":
+# @login_required # regular user inly can make direct payment
+def create_payment(request):
+    if request.user.role == "publisher":
         return HttpResponse("not authorized you must be publisher for create_payment")
     if request.method == "POST":
         form = PaymentForm(request.POST)
@@ -174,31 +174,48 @@ def create_payment(request,event_pk):
         form = PaymentForm()
     return render(request, "pages/create_payment.html", {"form": form})
 
-# @login_required
-# def create_payment(request):
-#     if not request.user.role == "publisher":
-#         return HttpResponse("not authorized you must be publisher for create_payment")
-#     if request.method == "POST":
-#         form = PaymentForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("create_payment")
-#     else:
-#         form = PaymentForm()
-#     return render(request, "pages/create_payment.html", {"form": form})
+def checkout_event(request, event_id): 
+    if str(request.user) != 'AnonymousUser' and request.user.role == "publisher":
+        return HttpResponse("Not authorized. You must be a publisher to create payment.")
+    event = Event.objects.get(pk=event_id)
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("create_payment")
+    else:
+        form = PaymentForm(initial={"event": event})  # تمرير الحدث إلى النموذج
+    return render(request, "pages/create_payment.html", {"form": form, "event": event})
+
+
+def checkout_card(request, card_pk): 
+    if str(request.user) != 'AnonymousUser' and request.user.role == "publisher":
+        return HttpResponse("Not authorized. You must be a publisher to create payment.")
+    cart = Cart.objects.get(pk=card_pk)  # الحصول على السلة بناءً على card_pk
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("create_payment")
+    else:
+        form = PaymentForm(initial={"cart": cart})  # تمرير السلة إلى النموذج
+    return render(request, "pages/create_payment.html", {"form": form, "cart": cart})
 
 
 @login_required
-def add_to_cart(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
+def add_to_cart(request, event_id):
+    print(event_id)
+    event = Event.objects.get(id=event_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart.items.add(ticket)
-    
-    return JsonResponse({
-        'success': True,
-        'cart_count': cart.items.count()
-    })
-    
+    cart.items.add(event)
+    return redirect('home')
+
+@login_required
+def view_cart(request):
+    cart = Cart.objects.get(user=request.user)
+    return render(request, 'pages/view_cart.html', {'cart': cart})
+
+
     
 @login_required
 def delete_event(request, event_id):
@@ -229,6 +246,7 @@ def link_list(request):
         {"name": "Home", "url": reverse("home")},
         {"name": "Create User", "url": reverse("signup")},
         {"name": "login User", "url": reverse("login_view")},
+        {"name": "view cart", "url": reverse("view_cart")},
         {"name": "Create Event", "url": reverse("create_event")},
         {"name": "Create Ticket", "url": reverse("create_ticket")},
         {"name": "Create Refund Request", "url": reverse("create_refund_request")},

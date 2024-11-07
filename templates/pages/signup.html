@@ -5,21 +5,26 @@
     <meta charset="UTF-8" />
     <title>SignUp</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-   
   </head>
+  {% if error %}
+  <style>
+    .errorlist {
+      color: red;
+      list-style: none;
+    }
+  </style>
+  {% endif %}
+
   <body>
     <div class="container">
       <h1>signup</h1>
-      <br>
-      {% if error %}
-      <p style="color: red">{{ error }}</p>
-      {% endif %}
+      <br />
+
       <form method="post">
         {% csrf_token %} {{ form.as_p }}
         <!-- عرض النموذج كفقاعات -->
         <button type="submit">إنشاء مستخدم</button>
       </form>
-    
     </div>
   </body>
 </html>
