@@ -1,4 +1,4 @@
-# BTES - Booking Tickets Events System9
+# BTES - Booking Tickets Events System10
 
 BTES (Booking Tickets Events System) is a web-based application designed to allow users to easily view, search, and book tickets for various events. It provides a user-friendly interface for managing event bookings and includes features like refunds, payment processing, and admin event management.
 
@@ -119,6 +119,7 @@ Follow these steps to contribute to the project:
 ### 4. Set Upstream to your forkes Repository
 
 - To keep your forked repository in sync with the your forked, add the forked repository as the origin remote:
+
   ```bash
   git remote add origin https://github.com/!!usernamegithup!!/BTES.git
   ```
@@ -128,6 +129,7 @@ Follow these steps to contribute to the project:
 ### (optional)(advance)Set Upstream to Original Repository
 
 - To keep your forked repository in sync with the original, add the original repository as the upstream remote:
+
   ```bash
   git remote add upstream https://github.com/mmsbah191/BTES.git
   ```
