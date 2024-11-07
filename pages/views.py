@@ -241,7 +241,7 @@ def delete_from_cart(request, event_id):
         event = get_object_or_404(Event, id=event_id)
         cart.items.remove(event)  # احذف العنصر من السلة
         cart.save()
-    return redirect('cart') 
+    return redirect('view_cart') 
 
 
 @login_required

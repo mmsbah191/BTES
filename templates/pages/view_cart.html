@@ -236,6 +236,7 @@
         <h2>${{ event.price }}</h2>
         <p>{{ event.date }}</p>
         <form action="{% url 'delete_from_cart' event.id %}" method="post">
+          {% csrf_token %}
           <button>
             Delelte from Cart
           </button>
