@@ -197,7 +197,7 @@ for varity & link GitHub with your git bash:
 ## Contributors
 
 - **Mohamed Mesbah Ibrahim**
-- **Mai Mokhtar Al-Galayi**
+- **May moktar algallai**
 
 ## Acknowledgments
 
