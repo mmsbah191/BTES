@@ -12,10 +12,10 @@ class UserForm(forms.ModelForm):
             'password': forms.PasswordInput(),
         }
 
-class PublisherProfileForm(forms.ModelForm):
-    class Meta:
-        model = PublisherProfile
-        fields = ['organization_name']
+# class PublisherProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = PublisherProfile
+#         fields = ['organization_name']
 
 # class SiteAdminProfileForm(forms.ModelForm):
 #     class Meta:
@@ -52,7 +52,7 @@ class TicketForm(forms.ModelForm):
 class RefundRequestForm(forms.ModelForm):
     class Meta:
         model = RefundRequest
-        fields = ['ticket', 'credit_amount', 'status']
+        fields = ['ticket', 'status']
 
 
 class CartForm(forms.ModelForm):

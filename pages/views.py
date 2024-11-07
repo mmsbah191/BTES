@@ -208,15 +208,15 @@ def payment_confirmation(request, payment_id):
 def checkout_card(request): 
     if str(request.user) != 'AnonymousUser' and request.user.role == "publisher":
         return HttpResponse("Not authorized. You must be a publisher to create payment.")
-    cart = Cart.objects.get(user=request.user)  # الحصول على السلة بناءً على card_pk
+    cart = Cart.objects.get(user=request.user) 
     if request.method == "POST":
         form = PaymentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("create_payment")
+            return redirect("payment_confirmation")
     else:
-        form = PaymentForm(initial={"cart": cart})  # تمرير السلة إلى النموذج
-    return render(request, "pages/create_payment.html", {"form": form, "cart": cart})
+        form = PaymentForm(initial={"cart": cart}) 
+    return render(request, "pages/checkout_event.html", {"form": form, "cart": cart})
 
 @login_required
 def booking(request):#checkout
@@ -256,8 +256,7 @@ def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     if request.method == "DELETE":
         event.delete()
-        return JsonResponse({'success': True}, status=200)
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    return redirect('home') 
 
 @login_required
 def edit_event(request, event_id):

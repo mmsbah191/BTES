@@ -1,0 +1,37 @@
+@startuml
+actor Guest
+actor User
+actor Publisher
+actor Admin
+
+rectangle System {
+  Guest -- (Create Account)
+  Guest -- (Browse Events)
+  Guest -- (View Event Details)
+  Guest -- (Book Ticket)
+
+  User -- (Login)
+  User -- (Search Events)
+  User -- (View Events)
+  User -- (Book Tickets)
+  User -- (Manage Cart)
+  User -- (Request Refund)
+  User -- (View Event Details)
+
+  Publisher -- (Add Event)
+  Publisher -- (Edit Event)
+  Publisher -- (Delete Event)
+  Publisher -- (Manage Own Events)
+
+  Admin -- (Manage Users)
+  Admin -- (Manage Events)
+  Admin -- (Manage Payments)
+  Admin -- (Review Refund Requests)
+  Admin -- (Generate Reports)
+  Admin -- (Manage All Events)
+  Admin -- (Manage All Users)
+  Admin -- (Manage Roles)
+  Admin -- (Add New User)
+}
+
+@enduml

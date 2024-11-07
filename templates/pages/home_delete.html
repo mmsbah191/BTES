@@ -170,9 +170,10 @@
                 alt="Profile"
                 class="profile-icon"
               />
-              <span>
-                {% if user.is_authenticated %} {{ user.username }} {% endif %}
-              </span>
+              {% if user.is_authenticated %}
+              <span> {{ user.username }} </span>
+              <span> {{ user.role }} </span>
+              {% endif %}
             </a>
             <ul class="dropdown" id="profile-dropdown">
               <li>
