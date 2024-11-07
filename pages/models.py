@@ -2,6 +2,7 @@ import os
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.http import HttpResponse
 
 
 class User(AbstractUser):
@@ -58,7 +59,6 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.title} {self.description}"
 
-
 class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -67,19 +67,58 @@ class Ticket(models.Model):
     is_refunded = models.BooleanField(default=False)
 
     def purchase_ticket(self):
+        # تحقق من توفر التذاكر
         if self.event.available_tickets >= self.quantity:
-            self.event.available_tickets -= self.quantity
+            self.event.available_tickets -= self.quantity  # خصم التذاكر من الحدث
             self.is_refunded = False
-            self.save()
-            self.event.save()
+            self.save()  # حفظ التذكرة
+            self.event.save()  # حفظ الحدث بعد التعديل
         else:
             raise ValueError("Not enough tickets available for this event.")
 
-    def print_ticket(self):
-        return f"Ticket for {self.event.title} - Quantity: {self.quantity} - Purchased by {self.user.username} on {self.purchase_date}"
-
     def __str__(self):
-        return f"Ticket for {self.event.title} - Quantity: {self.quantity} - Purchased by {self.user.username} on {self.purchase_date}"
+        return f"Ticket for {self.event.title} - Purchased by {self.user.username}"
+ 
+    
+class Payment(models.Model):
+    tickets = models.ManyToManyField(Ticket)  # الدفع قد يتضمن عدة تذاكر
+    payment_date = models.DateTimeField(auto_now_add=True)  # تاريخ الدفع
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # المبلغ المدفوع
+    payment_method = models.CharField(
+        max_length=50,
+        choices=[("Sadad", "Sadad"), ("Edfa3li", "Edfa3li")],
+    )  # وسائل الدفع
+    payment_status = models.CharField(
+        max_length=50,
+        choices=[("pending", "Pending"), ("completed", "Completed"), ("failed", "Failed")],
+        default="pending",
+    )  # حالة الدفع
+    transaction_id = models.CharField(max_length=255, blank=True, null=True)  # معرف المعاملة الخارجية
+    total_tickets = models.IntegerField(default=0)  # إجمالي التذاكر المخصومة (للإشارة إلى عدد التذاكر)
+    
+    # منطق خصم التذاكر
+    def process_payment(self):
+        if self.payment_status != "completed":
+            return HttpResponse("Payment is not completed yet.")
+            raise ValueError("Payment is not completed yet.")
+
+        total_deducted = 0
+        for ticket in self.tickets.all():
+            if ticket.event.available_tickets >= ticket.quantity:
+                ticket.event.available_tickets -= ticket.quantity  # خصم التذاكر من الحدث
+                ticket.save()
+                total_deducted += ticket.quantity
+            else:
+                return HttpResponse("Payment is not completed yet.")
+                raise ValueError(f"Not enough tickets available for the event: {ticket.event.title}")
+
+        self.total_tickets = total_deducted  # تسجيل عدد التذاكر المخصومة
+        self.save()  # حفظ الدفع بعد معالجة الخصم
+    
+    def __str__(self):
+        return f"Payment for {self.total_tickets} tickets on {self.payment_date} via {self.payment_method}"
+
+
 
 
 class RefundRequest(models.Model):
@@ -106,17 +145,6 @@ class RefundRequest(models.Model):
         return f"Refund request for {self.ticket}"
 
 
-class Payment(models.Model):
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    payment_date = models.DateTimeField(auto_now_add=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(
-        max_length=50,
-        choices=[("Sadad", "Sadad"), ("Edfa3li", "Edfa3li"), ("Ghodoon", "Ghodoon")],
-    )
-
-    def __str__(self):
-        return f"Payment for {self.ticket}"
 
 
 class Cart(models.Model):

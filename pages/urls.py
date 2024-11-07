@@ -11,9 +11,9 @@ urlpatterns = [
     path("", views.link_list, name="link_list"),  # رابط لعرض الروابط
     path("create_event/", views.create_event, name="create_event"),
     path("create_ticket/", views.create_ticket, name="create_ticket"),
-    path("create_payment/", views.create_payment, name="create_payment"),  # call fun()
+    path('payment_confirmation/<int:payment_id>/', views.payment_confirmation, name='payment_confirmation'),
     path("checkout_event/<int:event_id>/", views.checkout_event, name="checkout_event"),
-    path("checkout_card/<int:event_id>/", views.checkout_card, name="checkout_card"),
+    path("checkout_card/", views.checkout_card, name="checkout_card"),
     path("event_details/<int:event_id>/", views.event_details, name="event_details"),
     path(
         "create_refund_request/",

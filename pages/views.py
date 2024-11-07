@@ -10,7 +10,7 @@ from django.urls import reverse
 
 from .forms import (EventForm, LoginForm, PaymentForm, ProfileImageForm,
                     RefundRequestForm, TicketForm, UserForm)
-from .models import Cart, Event, Ticket, User
+from .models import Cart, Event, Payment, Ticket, User
 
 
 # Create your views here.
@@ -161,7 +161,7 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
-# @login_required # regular user inly can make direct payment
+@login_required # regular user only can make direct payment
 def create_payment(request):
     if request.user.role == "publisher":
         return HttpResponse("not authorized you must be publisher for create_payment")
@@ -174,24 +174,40 @@ def create_payment(request):
         form = PaymentForm()
     return render(request, "pages/create_payment.html", {"form": form})
 
-def checkout_event(request, event_id): 
+@login_required
+def checkout_event(request, event_id):
+        event = Event.objects.get(id=event_id)
+        if request.method == 'POST':
+            form = PaymentForm(request.POST)
+            if form.is_valid():
+                payment = form.save(commit=False)
+                payment.amount = event.price
+                payment.payment_status = "pending"
+                payment.save()
+                return redirect('payment_confirmation', payment_id=payment.id)
+        else:
+            form = PaymentForm()
+        return render(request, 'pages/checkout_event.html', {'event': event, 'form': form})
+  
+
+@login_required
+def payment_confirmation(request, payment_id):
+    try:
+        payment = Payment.objects.get(id=payment_id)
+        if request.method == 'POST':
+            payment.payment_status = "completed"
+            payment.process_payment()  # خصم التذاكر
+            return redirect('success_page')  # إعادة التوجيه إلى صفحة النجاح
+        return render(request, 'payment_confirmation.html', {'payment': payment})
+
+    except Payment.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Payment not found"})
+    
+@login_required # regular user only can make direct payment
+def checkout_card(request): 
     if str(request.user) != 'AnonymousUser' and request.user.role == "publisher":
         return HttpResponse("Not authorized. You must be a publisher to create payment.")
-    event = Event.objects.get(pk=event_id)
-    if request.method == "POST":
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("create_payment")
-    else:
-        form = PaymentForm(initial={"event": event})  # تمرير الحدث إلى النموذج
-    return render(request, "pages/create_payment.html", {"form": form, "event": event})
-
-
-def checkout_card(request, card_pk): 
-    if str(request.user) != 'AnonymousUser' and request.user.role == "publisher":
-        return HttpResponse("Not authorized. You must be a publisher to create payment.")
-    cart = Cart.objects.get(pk=card_pk)  # الحصول على السلة بناءً على card_pk
+    cart = Cart.objects.get(user=request.user)  # الحصول على السلة بناءً على card_pk
     if request.method == "POST":
         form = PaymentForm(request.POST)
         if form.is_valid():
@@ -201,14 +217,31 @@ def checkout_card(request, card_pk):
         form = PaymentForm(initial={"cart": cart})  # تمرير السلة إلى النموذج
     return render(request, "pages/create_payment.html", {"form": form, "cart": cart})
 
+@login_required
+def booking(request):#checkout
+    cart = Cart.objects.get()
+    return render(request, 'cart/checkout.html', {'cart': cart})
+    
 
 @login_required
 def add_to_cart(request, event_id):
-    print(event_id)
     event = Event.objects.get(id=event_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart.items.add(event)
     return redirect('home')
+
+@login_required
+def add_to_cart(request, event_id):  # Use event_id instead of ticket_id
+    if request.method == 'POST' and request.user.is_authenticated:
+        try:
+            event = Event.objects.get(pk=event_id)  # Fetch by event_id
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            cart.items.add(event)
+            cart.save()
+            return JsonResponse({"success": True, "cart_count": cart.items.count()})
+        except Event.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Event not found"})
+    return JsonResponse({"success": False, "error": "Invalid request"})
 
 @login_required
 def view_cart(request):
@@ -250,7 +283,6 @@ def link_list(request):
         {"name": "Create Event", "url": reverse("create_event")},
         {"name": "Create Ticket", "url": reverse("create_ticket")},
         {"name": "Create Refund Request", "url": reverse("create_refund_request")},
-        {"name": "Create Payment", "url": reverse("create_payment")},
     ]
     return render(request, "pages/link_list.html", {"links": links})
 

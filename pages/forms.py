@@ -54,13 +54,16 @@ class RefundRequestForm(forms.ModelForm):
         model = RefundRequest
         fields = ['ticket', 'credit_amount', 'status']
 
-class PaymentForm(forms.ModelForm):
-    class Meta:
-        model = Payment
-        fields = ['ticket', 'amount', 'payment_method']
-
 
 class CartForm(forms.ModelForm):
     class Meta:
         model = Cart
         fields = ['items']
+        
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = ['payment_method']
+        widgets = {
+            'payment_method': forms.Select(choices=Payment._meta.get_field('payment_method').choices)
+        }

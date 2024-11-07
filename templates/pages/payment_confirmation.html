@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <title>create payment</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-   
 
     <style>
       #id_ticket {
@@ -15,11 +14,13 @@
   </head>
   <body>
     <div class="container">
-      <h1>create payment</h1>
-      <form method="post">
-        {% csrf_token %} {{ form.as_p }}
-        <!-- عرض النموذج كفقاعات -->
-        <button type="submit">إنشاء دفع</button>
+      <h1>Confirm Your Payment</h1>
+      <p>Payment Amount: {{ payment.amount }} USD</p>
+      <p>Payment Method: {{ payment.payment_method }}</p>
+
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Confirm Payment</button>
       </form>
     </div>
   </body>
