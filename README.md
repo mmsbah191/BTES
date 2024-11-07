@@ -1,4 +1,4 @@
-# BTES - Booking Tickets Events System8
+# BTES - Booking Tickets Events System9
 
 BTES (Booking Tickets Events System) is a web-based application designed to allow users to easily view, search, and book tickets for various events. It provides a user-friendly interface for managing event bookings and includes features like refunds, payment processing, and admin event management.
 
@@ -92,7 +92,7 @@ py manage.py createsuperuser
 
 Follow these steps to contribute to the project:
 
-### 1. Fork the Repository 
+### 1. Fork the Repository
 
 - First, click on **Fork** in the top-right corner to create a copy of the repository under your GitHub account.
   **prefer with same name BTES.**
@@ -100,12 +100,15 @@ Follow these steps to contribute to the project:
 ### 2. Clone the Repository
 
 - Clone your forked repository to your local machine by running the following command:
+
   ```bash
   cd desktop
   ```
+
   ```bash
   git clone https://github.com/mmsbah191/BTES.git
   ```
+
 ### 3. Navigate to the Project Directory
 
 - Move into the project directory:
@@ -119,8 +122,8 @@ Follow these steps to contribute to the project:
   ```bash
   git remote add origin https://github.com/!!usernamegithup!!/BTES.git
   ```
-  **prefer with origin name small letter for Original Repository.**
 
+  **prefer with origin name small letter for Original Repository.**
 
 ### (optional)(advance)Set Upstream to Original Repository
 
@@ -128,28 +131,32 @@ Follow these steps to contribute to the project:
   ```bash
   git remote add upstream https://github.com/mmsbah191/BTES.git
   ```
+
   **prefer with upstream name small letter  for Original Repository.**
 
-
-
 ### 5. First command before push updates to github
-  ```bash
-  git branch -m main
-  ```
-  ```bash
-  git config --global user.name "yourName"
-```
-  ```bash
-  git config --global user.email "yourMail@g.c"
-  ```
-  ```bash
-  git pull origin main --allow-unrelated-histories
-  ```
-for varity & link GitHub with your git bash:
-  ```bash
-  git push -u origin main
-  ```
 
+```bash
+git branch -m main
+```
+
+```bash
+git config --global user.name "yourName"
+```
+
+```bash
+git config --global user.email "yourMail@g.c"
+```
+
+```bash
+git pull origin main --allow-unrelated-histories
+```
+
+for varity & link GitHub with your git bash:
+
+```bash
+git push -u origin main
+```
 
 ### 6. Start Coding & do changes
 
@@ -176,8 +183,8 @@ for varity & link GitHub with your git bash:
   git push -u origin main
   ```
 - someties you need fetch & pull updates before push
-    ```bash
-   git fetch main
+  ```bash
+  git fetch main
   git pull origin main --allow-unrelated-histories
   ```
 
@@ -190,7 +197,7 @@ for varity & link GitHub with your git bash:
   git merge upstream/main
   ```
 
-### 10. Submit a Pull Request from sync at your repository forked 
+### 10. Submit a Pull Request from sync at your repository forked
 
 - After pushing all your changes, go to your forked repository on GitHub, and you’ll see an option to submit a pull request (PR). Follow the prompts to create the PR to the original repository’s main branch.
 
