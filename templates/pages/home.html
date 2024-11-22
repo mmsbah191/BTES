@@ -173,6 +173,9 @@
           <li>
             <a href="{% url 'search_event' %}" id="search-button">Search Events</a>
           </li>
+          <li>
+            <a href="{% url 'booked_events' %}" id="booked_events">booked</a>
+          </li>
     
           {% if user.is_authenticated %}
           <li class="profile-menu">
