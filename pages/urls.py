@@ -1,5 +1,5 @@
 from django.urls import path
-
+from .views import search_event
 from . import views
 
 urlpatterns = [
@@ -36,4 +36,6 @@ urlpatterns = [
         name="delete_from_cart",
     ),
     path("edit_event/<int:event_id>/", views.edit_event, name="edit_event"),
+    path('search-event/', views.search_event, name='search_event'),
+
 ]

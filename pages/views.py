@@ -7,10 +7,13 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from django.urls import reverse
-
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Event
 from .forms import (EventForm, LoginForm, PaymentForm, ProfileImageForm,
                     RefundRequestForm, TicketForm, UserForm)
 from .models import Cart, Event, Payment, Ticket, User
+from pages import models
 
 
 # Create your views here.
@@ -287,3 +290,13 @@ def link_list(request):
     return render(request, "pages/link_list.html", {"links": links})
 
 
+
+
+@login_required
+def search_event(request):
+    query = request.GET.get('q', '')
+    results = None
+    if query:
+        # البحث في العنوان أو الوصف
+        results = Event.objects.filter(models.Q(title__icontains=query) | models.Q(description__icontains=query))
+    return render(request, 'pages/search_event.html', {'query': query, 'results': results})
