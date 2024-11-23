@@ -1,5 +1,7 @@
 import os
-
+from time import timezone
+from .models import Event
+from .models import Booking
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -14,6 +16,10 @@ from .forms import (EventForm, LoginForm, PaymentForm, ProfileImageForm,
                     RefundRequestForm, TicketForm, UserForm)
 from .models import Cart, Event, Payment, Ticket, User
 from pages import models
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Booking  # افترض أن لديك نموذج للحجوزات
+from django.db import models
 
 
 # Create your views here.
@@ -300,3 +306,19 @@ def search_event(request):
         # البحث في العنوان أو الوصف
         results = Event.objects.filter(models.Q(title__icontains=query) | models.Q(description__icontains=query))
     return render(request, 'pages/search_event.html', {'query': query, 'results': results})
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Booking
+
+@login_required
+def booked_events(request):
+    # جلب الحجوزات الخاصة بالمستخدم
+    user_bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'pages/booked_events.html', {'bookings': user_bookings})
+
+@login_required
+def delete_booking(request, booking_id):
+    # حذف حجز معين
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    booking.delete()
+    return redirect('booked_events')  # إعادة التوجيه إلى صفحة الحجوزات

@@ -1,0 +1,30 @@
+{% block content %}
+<h1>My Booked Events</h1>
+{% if bookings %}
+<table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for booking in bookings %}
+    <tr>
+      <td>{{ booking.event.title }}</td>
+      <td>{{ booking.event.date }}</td>
+      <td>
+        <form action="{% url 'delete_booking' booking.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>You have no bookings.</p>
+{% endif %}
+{% endblock %}
