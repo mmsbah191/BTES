@@ -1,8 +1,9 @@
 from django.urls import path
 
 from pages import admin
-from .views import search_event
+
 from . import views
+from .views import search_event
 
 urlpatterns = [
     path("index/", views.index, name="index"),
@@ -10,15 +11,14 @@ urlpatterns = [
     path(
         "update_profile_image/", views.update_profile_image, name="update_profile_image"
     ),
-    
     path("create_event/", views.create_event, name="create_event"),
     path("create_ticket/", views.create_ticket, name="create_ticket"),
     path(
-        "payment_confirmation/<int:payment_id>/",
+        "payment_confirmation/<int:event_id>/",
         views.payment_confirmation,
         name="payment_confirmation",
     ),
-       path('link_list/', views.link_list, name='link_list'),
+    path("", views.link_list, name="link_list"),
     path("checkout_event/<int:event_id>/", views.checkout_event, name="checkout_event"),
     path("checkout_card/", views.checkout_card, name="checkout_card"),
     path("event_details/<int:event_id>/", views.event_details, name="event_details"),
@@ -39,7 +39,9 @@ urlpatterns = [
         name="delete_from_cart",
     ),
     path("edit_event/<int:event_id>/", views.edit_event, name="edit_event"),
-    path('search-event/', views.search_event, name='search_event'),
-  path('booked-events/', views.booked_events, name='booked_events'),
-    path('delete-booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),
+    path("search-event/", views.search_event, name="search_event"),
+    path("booked-events/", views.booked_events, name="booked_events"),
+    path(
+        "delete-booking/<int:booking_id>/", views.delete_booking, name="delete_booking"
+    ),
 ]

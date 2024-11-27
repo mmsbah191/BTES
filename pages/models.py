@@ -1,5 +1,5 @@
-from datetime import timezone
 import os
+from datetime import timezone
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -127,13 +127,14 @@ class Payment(models.Model):
         return f"Payment for {self.total_tickets} tickets on {self.payment_date} via {self.payment_method}"
 
 
-class Booking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # ربط الحجز بالمستخدم
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)  # ربط الحجز بالحدث
-    created_at = models.DateTimeField(default=timezone.now)  # وقت إنشاء الحجز
+# class Booking(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)  # ربط الحجز بالمستخدم
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE)  # ربط الحجز بالحدث
+#     created_at = models.DateTimeField(default=timezone.now)  # وقت إنشاء الحجز
 
-    def __str__(self):
-        return f"Booking for {self.event.title} by {self.user.username}"
+#     def __str__(self):
+#         return f"Booking for {self.event.title} by {self.user.username}"
+    
 class RefundRequest(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     request_date = models.DateTimeField(auto_now_add=True)
