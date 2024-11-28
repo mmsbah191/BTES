@@ -129,14 +129,14 @@ class TestPayment(TestCase):
             available_tickets=10,
         )
         self.ticket = Ticket.objects.create(event=self.event, user=self.user, quantity=1)
-        
-def test_payment_creation(self):
-    payment = Payment.objects.create(
-        amount=self.event.price,
-        payment_method="Sadad",
-        payment_status="completed",
-    )
-    payment.tickets.add(self.ticket)
-    # Assume processing the payment also involves purchasing tickets
-    self.ticket.purchase_ticket()  # Simulate ticket purchase
-    self.assertEqual(self.event.available_tickets, 9)  # Now this should be 9
+
+    def test_payment_creation(self):
+        payment = Payment.objects.create(
+            amount=self.event.price,
+            payment_method="Sadad",
+            payment_status="completed",
+        )
+        payment.tickets.add(self.ticket)
+        # Assume processing the payment also involves purchasing tickets
+        self.ticket.purchase_ticket()  # Simulate ticket purchase
+        self.assertEqual(self.event.available_tickets, 9)  # Now this should be 9
