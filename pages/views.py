@@ -349,6 +349,6 @@ def booked_events(request):
 @login_required
 def delete_booking(request, booking_id):
     # حذف حجز معين
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    booking = get_object_or_404(booking, id=booking_id, user=request.user)
     booking.delete()
     return redirect("booked_events")  # إعادة التوجيه إلى صفحة الحجوزات
