@@ -343,12 +343,10 @@ def search_event(request):
 def booked_events(request):
     # جلب الحجوزات الخاصة بالمستخدم
     user_Tickets = Ticket.objects.filter(user=request.user)
-    return render(request, "pages/booked_events.html", {"tickets": user_Tickets})
-
-
+    return render(request, "pages/booked_events.html", {"tickets": user_Tickets}
 @login_required
 def delete_booking(request, booking_id):
     # حذف حجز معين
-    booking = get_object_or_404(booking, id=booking_id, user=request.user)
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
     booking.delete()
     return redirect("booked_events")  # إعادة التوجيه إلى صفحة الحجوزات

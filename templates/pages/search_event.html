@@ -229,10 +229,7 @@
 
       {% if query %}
       <h2>Results for "{{ query }}"</h2>
-      {% endif %}
-
-      {% if events %} 
-      {% for event in events %}
+      {% endif %} {% if events %} {% for event in events %}
 
       <div class="event-card">
         <img
@@ -244,7 +241,6 @@
         <p>{{ event.date }}</p>
         <form action="{% url 'add_to_cart' event.id %}" method="post">
           {% csrf_token %}
-
           <button>Add to Cart</button>
         </form>
         <form action="{% url 'checkout_event' event.id %}" method="post">
@@ -258,7 +254,7 @@
       </div>
       {% endfor %} {% else %}
       <p>No events found.</p>
-      {% endif %} 
+      {% endif %}
     </main>
   </body>
 </html>
