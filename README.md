@@ -22,10 +22,10 @@ Before you begin, make sure you have the following software installed:
 
 1. **where you want Installation Btes project**:
 
-   open git bash command or ps write yourpath  Let's say at desktop
+   open **git bash** command or ps write yourpath  Let's say at desktop
 
 ```bash
-cd C:/Users/%USERPROFILE%/Desktop
+cd C:/Users/Desktop
 ```
 
 2. **Clone the repository**:
@@ -33,8 +33,6 @@ cd C:/Users/%USERPROFILE%/Desktop
 ```bash
  git clone https://github.com/mmsbah191/BTES.git
 ```
-
-3.**Opthinal**
 
 ```bash
  cd BTES
@@ -48,14 +46,21 @@ git branch -m main
 
 by terminal or powershell(ps) or git, change %USERPROFILE% with your username like
 
-1. **go to the project directory**:
+1.**go to the project directory**:
 
    ```bash
    cd C:/Users/%USERPROFILE%/Desktop/BTES
    ```
+**or from git bash**
+   ```bash
+ cd Desktop/BTES
+```
+
 2. **Open your editor or Ide from current path**
    if VsCode `code .` or click riht in files then alot option then open BTES with vscode
    then by your editor go to built in terminal with `ctrl+`` or `ctrl+ذ` or click terminal button in navbar option
+
+
 3. **Activate the virtual environment**
    (optinal try discard it) sometimes your terminal editor Activate automatic
 
