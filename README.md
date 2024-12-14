@@ -58,10 +58,11 @@ by terminal or powershell(ps) or git, change %USERPROFILE% with your username li
 
 2. **Open your editor or Ide from current path**
    if VsCode `code .` or click riht in files then alot option then open BTES with vscode
-   then by your editor go to built in terminal with `ctrl+`` or `ctrl+ذ` or click terminal button in navbar option
+   then by your editor go to built in terminal with `ctrl+``
+   - or `ctrl+ذ` or click terminal button in navbar option
 
 
-3. **Activate the virtual environment**
+4. **Activate the virtual environment**
    (optinal try discard it) sometimes your terminal editor Activate automatic
 
    - **On Windows powershell**:
@@ -72,13 +73,13 @@ by terminal or powershell(ps) or git, change %USERPROFILE% with your username li
      ```bash
      source venv/bin/activate
      ```
-4. **Run the Django development server**:
+5. **Run the Django development server**:
    from btes directory
 
    ```bash
    py manage.py runserver
    ```
-5. **Open a web browser and go to**:
+6. **Open a web browser and go to**:
    This will open the application on your local web server.
 
    - pages links: ```http://127.0.0.1:8000```
