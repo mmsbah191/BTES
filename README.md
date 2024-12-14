@@ -56,10 +56,13 @@ by terminal or powershell(ps) or git, change %USERPROFILE% with your username li
  cd Desktop/BTES
 ```
 
-2. **Open your editor or Ide from current path**
-   if VsCode `code .` or click riht in files then alot option then open BTES with vscode
-   then by your editor go to built in terminal with `ctrl+``
-   - or `ctrl+ذ` or click terminal button in navbar option
+2. **From current path Open your editor:**
+   - if VsCode in cmd(powerShell) write `code .`.
+   - or click right in files then alot option then open BTES with vscode
+     
+
+2. **From your editor:**
+   - then by your editor go to built in terminal by click terminal button in navbar option or as shorcuts VsCode as `ctrl+``
 
 
 4. **Activate the virtual environment**
@@ -84,7 +87,6 @@ by terminal or powershell(ps) or git, change %USERPROFILE% with your username li
 
    - pages links: ```http://127.0.0.1:8000```
    - databases(admin panel) link: ```http://127.0.0.1:8000/admin/```
-  
 **Notes:**
 for login in database create username if you don't have one get one by terminal write.
 
@@ -92,7 +94,7 @@ for login in database create username if you don't have one get one by terminal 
 py manage.py createsuperuser
 ```
 
-## Functional Features
+# Functional Features
 **For Visitors:** 
 - View events, search, and book tickets without logging in.
 - Cannot request refunds.
