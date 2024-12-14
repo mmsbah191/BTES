@@ -1,12 +1,12 @@
-# BTES - 
--**Project Name: **Booking Ticket Event System (BTES)
--**Purpose: **BTES (Booking Tickets Events System) is a web-based application designed to allow users to easily view, search, and book tickets for various events. It provides a user-friendly interface for managing event bookings and includes features like refunds, payment processing, and admin event management.
+# BTES comprehensive developer documentation
+-**Project Name:** Booking Ticket Event System (BTES)
+-**Purpose:** BTES (Booking Tickets Events System) is a web-based application designed to allow users to easily view, search, and book tickets for various events. It provides a user-friendly interface for managing event bookings and includes features like refunds, payment processing, and admin event management.
 
 ## Tech Stack
 
 **Backend:** Django
 **Frontend:** HTML, CSS, JavaScript
-**Payment Gateways: **Sadad, Edfa3li
+**Payment Gateways:** Sadad, Edfa3li
 
 # Project Setup
 
