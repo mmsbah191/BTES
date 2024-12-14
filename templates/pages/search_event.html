@@ -217,14 +217,25 @@
         <button>Add to Cart</button>
         <button>Book Ticket Now</button>
       </div> -->
-      <form method="get">
-        <input
+      <form method="get" >
+        <input 
           type="text"
           name="q"
           placeholder="Search by title or description"
           value="{{ query }}"
         />
-        <button type="submit">Search</button>
+        <button type="submit" style="display: block;">Search</button>
+      </form>
+      <br>
+      <div></div>
+      <form action="">
+        <input
+        type="text"
+        name="date"
+        placeholder="Search by date or description"
+        value="{{ date }}"
+      />
+      <button type="submit">Search</button>
       </form>
 
       {% if query %}

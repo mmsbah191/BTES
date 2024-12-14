@@ -324,29 +324,48 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 
 def search_event(request):
-    query = request.GET.get("q", "")  # جلب من html
-    query = query.strip()  # تأكد من إزالة الفراغات من البداية والنهاية
-    results = Event.objects.none()  # تهيئة النتائج فارغ
+    query = request.GET.get("q", "")  
+    query = query.strip()  
+    results = Event.objects.none() 
 
     if query:
-        # البحث باستخدام شروط متعددة
         results = Event.objects.filter(
             Q(title__icontains=query) | Q(description__icontains=query)
-        ).distinct()  # `distinct` لتجنب التكرار في النتائج
+        ).distinct()
 
     return render(
         request, "pages/search_event.html", {"query": query, "events": results}
     )
 
-
 @login_required
 def booked_events(request):
-    # جلب الحجوزات الخاصة بالمستخدم
     user_Tickets = Ticket.objects.filter(user=request.user)
-    return render(request, "pages/booked_events.html", {"tickets": user_Tickets}
+    return render(request, "pages/booked_events.html", {"tickets": user_Tickets})
+
 @login_required
 def delete_booking(request, booking_id):
-    # حذف حجز معين
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    booking = get_object_or_404(Ticket, id=booking_id, user=request.user)
     booking.delete()
-    return redirect("booked_events")  # إعادة التوجيه إلى صفحة الحجوزات
+    return redirect("booked_events") 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def booked_events_copy(request):
+    return render(request, "pages/booked_events_copy.html")

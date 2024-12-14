@@ -191,8 +191,8 @@
         <ul>
           <li><a href="{% url 'home' %}">Home</a></li>
           <li><a href="#">Pending</a></li>
-          <li><a href="#">Booking</a></li>
           <li><a href="{% url 'link_list' %}">List</a></li>
+          <li><a href="{% url 'booked_events_copy' %}">Booking</a></li>
 
           {% if user.is_authenticated %}
           <!-- قائمة الملف الشخصي -->

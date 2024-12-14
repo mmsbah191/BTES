@@ -41,6 +41,7 @@ urlpatterns = [
     path("edit_event/<int:event_id>/", views.edit_event, name="edit_event"),
     path("search-event/", views.search_event, name="search_event"),
     path("booked-events/", views.booked_events, name="booked_events"),
+    path("booked-event/", views.booked_events_copy, name="booked_events_copy"),
     path(
         "delete-booking/<int:booking_id>/", views.delete_booking, name="delete_booking"
     ),

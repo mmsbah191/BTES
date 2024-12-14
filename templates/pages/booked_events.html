@@ -165,13 +165,13 @@
         <ul>
           <li><a href="{% url 'home' %}">Home</a></li>
           <li><a href="#">Pending</a></li>
-          <li><a href="#">Booking</a></li>
           <li><a href="{% url 'view_cart' %}">Cart</a></li>
           
           <!-- زر البحث -->
           <li>
             <a href="{% url 'search_event' %}" id="search-button">Search Events</a>
           </li>
+          <li><a href="{% url 'booked_events_copy' %}">Booking</a></li>
           <li>
             <a href="{% url 'booked_events' %}" id="booked_events">booked</a>
           </li>

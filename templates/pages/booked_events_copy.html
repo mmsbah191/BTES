@@ -157,7 +157,6 @@
         background-color: #555;
       }
     </style>
-    <script src="{% static 'js/home.js' %}"></script>
   </head>
   <body>
     <header>
@@ -173,6 +172,7 @@
             <a href="{% url 'search_event' %}" id="search-button">Search Events</a>
           </li>
           <li><a href="{% url 'booked_events_copy' %}">Booking</a></li>
+
           <li>
             <a href="{% url 'booked_events' %}" id="booked_events">booked</a>
           </li>
@@ -207,42 +207,23 @@
     </header>
     
     <main id="events-Main">
-      <!-- <div class="event-card">
-        <img src="imgages\realmadrid.jpeg" alt="Event Image" />
-        <h2>Match: Real Madrid</h2>
-        <p>Sun, 23 Nov 2024</p>
-        <button>Add to Cart</button>
-        <button>Book Ticket Now</button>
-      </div> -->
-      {% for event in events %}
+      <!-- {% for tic in tickets %}
       <div class="event-card">
         <img
-          src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
-          alt="{{ event.name }}"
+          src="{% if tic.event.image %}{{ tic.event.image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
+          alt="{{ tic.event.name }}"
         />
 
-        <h2>{{ event.title }}</h2>
-        <h2>{{ event.price }}</h2>
-        <p>{{ event.date }}</p>
+        <h2>{{ tic.event.title }}</h2>
+        <h2>{{ tic.event.price }}</h2>
+        <p>{{ tic.event.date }}</p>
         <!-- هنا نحتاج إضاقة js   تعمل مع او بدون حسب برمجتك وتعديلاتك لكن تحتاج-->
-        <form action="{% url 'add_to_cart' event.id %}" method="post">
-          {% csrf_token %}
-
-          <button>
-            Add to Cart
-          </button>
-        </form>
-        <form action="{% url 'checkout_event' event.id %}" method="post">
-          {% csrf_token %}
-          <button type="submit">Booking Event</button>
-      </form>
-        <form action="{% url 'event_details' event.id %}" method="post">
+        <form action="{% url 'event_details' tic.event.id %}" method="post">
           {% csrf_token %}
           <button>details</button>
         </form>
       </div>
-      {% endfor %}
+      {% endfor %} -->
     </main>
-    <script src="{% static 'js/addCart.js' %}"></script>
   </body>
 </html>
