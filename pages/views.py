@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from django.urls import reverse
 
+from events.views import reserve_ticket
 from pages import models
 
 from .forms import (EventForm, LoginForm, PaymentForm, ProfileImageForm,
@@ -27,6 +28,10 @@ def home(request):
     if str(request.user) != "AnonymousUser" and request.user.role == "publisher":
         return render(request, "pages/home_delete.html", {"events": events})
     return render(request, "pages/home.html", {"events": events})
+
+def event_details(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, "pages/event_details.html", {"event": event})
 
 
 @login_required
@@ -60,10 +65,6 @@ def create_ticket(request):
     return render(request, "pages/create_ticket.html", {"form": form})
 
 
-def event_details(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    return render(request, "pages/event_details.html", {"event": event})
-
 
 def create_refund_request(request):
     if str(request.user) != "AnonymousUser" and request.user.role == "publisher":
@@ -78,6 +79,7 @@ def create_refund_request(request):
     else:
         form = RefundRequestForm()
     return render(request, "pages/create_refund_request.html", {"form": form})
+
 
 
 
@@ -184,6 +186,7 @@ def create_payment(request):
 
 @login_required
 def checkout_event(request, event_id):
+    return redirect("reserve_ticket", event_id=event_id)
     event = Event.objects.get(id=event_id)
     if request.method == "POST":
         form = PaymentForm(request.POST)

@@ -218,7 +218,7 @@
       <div class="event-card">
         <img
           src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
-          alt="{{ event.name }}"
+          alt="{{ event.title }}"
         />
 
         <h2>{{ event.title }}</h2>

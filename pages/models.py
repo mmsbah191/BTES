@@ -59,6 +59,9 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=100)
     available_tickets = models.IntegerField(default=50)
+    # tickets_sold = models.IntegerField(default=0)
+    publisher = models.ForeignKey(User, related_name='events', on_delete=models.CASCADE)
+    
 
     def __str__(self):
         return f"{self.title} {self.description[:30]}..."
@@ -67,19 +70,19 @@ class Event(models.Model):
 class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    purchase_date = models.DateTimeField(auto_now_add=True)
+    reserved_at = models.DateTimeField(auto_now_add=True)
+    is_reserved = models.BooleanField(default=False, blank=True, null=True)
     is_refunded = models.BooleanField(default=False)
 
-    def purchase_ticket(self):
-        # Check if enough tickets are available
-        if self.event.available_tickets >= self.quantity:
-            self.event.available_tickets -= self.quantity  # Subtract the purchased tickets from the event
-            self.is_refunded = False
-            self.save()  # Save the ticket
-            self.event.save()  # Save the event after updating ticket count
-        else:
-            raise ValueError("Not enough tickets available for this event.")
+    # def purchase_ticket(self):
+    #     # Check if enough tickets are available
+    #     if self.event.available_tickets >= self.quantity:
+    #         self.event.available_tickets -= self.quantity  # Subtract the purchased tickets from the event
+    #         self.is_refunded = False
+    #         self.save()  # Save the ticket
+    #         self.event.save()  # Save the event after updating ticket count
+    #     else:
+    #         raise ValueError("Not enough tickets available for this event.")
 
     def __str__(self):
         return f"Ticket for {self.event.title} - Purchased by {self.user.username}"
@@ -151,6 +154,7 @@ class RefundRequest(models.Model):
 
     def __str__(self):
         return f"Refund request for {self.ticket}"
+
 
 
 class Cart(models.Model):

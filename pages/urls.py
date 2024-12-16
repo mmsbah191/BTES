@@ -45,4 +45,5 @@ urlpatterns = [
     path(
         "delete-booking/<int:booking_id>/", views.delete_booking, name="delete_booking"
     ),
+    
 ]
