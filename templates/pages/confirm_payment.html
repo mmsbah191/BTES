@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الدفع</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .details {
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تأكيد الدفع</h1>
+        <div class="details">
+            <p><strong>رمز الحجز:</strong> {{ booking.booking_code }}</p>
+            <p><strong>اسم الحدث:</strong> {{ booking.event.name }}</p>
+            <p><strong>المبلغ المطلوب:</strong> {{ booking.event.price }} دولار</p>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn">تأكيد الدفع</button>
+        </form>
+    </div>
+</body>
+</html>

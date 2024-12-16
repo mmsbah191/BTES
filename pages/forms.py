@@ -1,7 +1,6 @@
 from django import forms
 
-from .models import (Cart, Event, Payment, PublisherProfile, RefundRequest,
-                     SiteAdminProfile, Ticket, User)
+from .models import Cart, Event, Payment, RefundRequest, Ticket, User
 
 
 class UserForm(forms.ModelForm):
@@ -11,6 +10,13 @@ class UserForm(forms.ModelForm):
         widgets = {
             'password': forms.PasswordInput(),
         }
+    
+    # إذا أردت إضافة تحقق من الـ role يمكن إضافته هنا
+    def clean_role(self):
+        role = self.cleaned_data.get('role')
+        if role not in ['regular', 'publisher', 'admin']:
+            raise forms.ValidationError("Invalid role selected.")
+        return role
 
 # class PublisherProfileForm(forms.ModelForm):
 #     class Meta:
@@ -47,7 +53,14 @@ class EventForm(forms.ModelForm):
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['event', 'user']
+        fields = ['event']
+        
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event', None)  # Get the event passed during form initialization
+        super(TicketForm, self).__init__(*args, **kwargs)
+        if event:
+            self.fields['event'].initial = event  # Set the initial value for the event field
+            self.fields['event'].widget = forms.HiddenInput()  # Hide the field
 
 class RefundRequestForm(forms.ModelForm):
     class Meta:
@@ -67,3 +80,4 @@ class PaymentForm(forms.ModelForm):
         widgets = {
             'payment_method': forms.Select(choices=Payment._meta.get_field('payment_method').choices)
         }
+        

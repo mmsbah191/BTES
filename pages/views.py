@@ -80,6 +80,7 @@ def create_refund_request(request):
     return render(request, "pages/create_refund_request.html", {"form": form})
 
 
+
 def signup(request):
     if request.user.is_authenticated:
         return redirect("home")
@@ -192,7 +193,6 @@ def checkout_event(request, event_id):
             payment.payment_status = "pending"
             payment.save()
             return redirect("payment_confirmation", event_id=event_id)
-            return redirect("payment_confirmation", payment_id=payment.id)
     else:
         form = PaymentForm()
     return render(request, "pages/checkout_event.html", {"event": event, "form": form})

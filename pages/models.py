@@ -17,7 +17,10 @@ class User(AbstractUser):
             ("admin", "Admin"),
         ],
         default="regular",
-    )  # A field to specify the user role
+    )
+    password = models.CharField(max_length=128)
+    username = models.CharField(max_length=150, unique=True)
+
 
     # Function to return path for the profile image upload
     def get_profile_image_path(instance, filename):
@@ -35,14 +38,15 @@ class User(AbstractUser):
         return self.role == "admin"
 
 
-class PublisherProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    organization_name = models.CharField(max_length=255, blank=True, null=True)
+
+# class PublisherProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     organization_name = models.CharField(max_length=255, blank=True, null=True)
 
 
-class SiteAdminProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    admin_permissions = models.TextField()  # Define special permissions if needed
+# class SiteAdminProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     admin_permissions = models.TextField()  # Define special permissions if needed
 
 
 
@@ -154,9 +158,18 @@ class Cart(models.Model):
     items = models.ManyToManyField(Event)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    _instance = None  
+
+    
+    def __new__(self,user):
+        if self._instance is None: 
+            self._instance =Cart.objects.get_or_create(user=user)[0]
+        return self._instance
 
     def total_price(self):
         return sum(item.price for item in self.items.all())
 
     def __str__(self):
         return f"Cart for {self.user.username}"
+
