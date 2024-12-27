@@ -14,7 +14,7 @@ from pages import models
 
 from .forms import (EventForm, LoginForm, PaymentForm, ProfileImageForm,
                     RefundRequestForm, TicketForm, UserForm)
-from .models import Cart, Event, Payment, Ticket, User
+from .models import Cart, Event, Payment, RefundRequest, Ticket, User
 
 
 # Create your views here.
@@ -339,7 +339,7 @@ def search_event(request):
 
 @login_required
 def booked_events(request):
-    user_Tickets = Ticket.objects.filter(user=request.user)
+    user_Tickets = Ticket.objects.filter(user=request.user,is_refunded=False)
     return render(request, "pages/booked_events.html", {"tickets": user_Tickets})
 
 @login_required
@@ -350,22 +350,35 @@ def delete_booking(request, booking_id):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+@login_required
+def booked_events_copy(request):
+    return render(request, "pages/booked_events_copy.html")
 
 
 
 
 
 @login_required
-def booked_events_copy(request):
-    return render(request, "pages/booked_events_copy.html")
+def request_refund(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+
+    # Check if the ticket is eligible for a refund
+    if RefundRequest.objects.filter(ticket=ticket).exists():
+        return HttpResponse("Refund already requested for this ticket.")
+    if 1 or ticket.event.date <= timezone.now().date():
+        return HttpResponse("This ticket is not eligible for a refund.")
+
+    if request.method == "POST":
+        form = RefundRequestForm(request.POST)
+        if form.is_valid():
+            refund_request = form.save(commit=False)
+            refund_request.ticket = ticket
+            refund_request.save()
+            ticket.is_refunded = True
+            ticket.save()
+            # Notify admin (placeholder)
+            return HttpResponse("Refund request submitted.")
+    else:
+        form = RefundRequestForm()
+
+    return render(request, "pages/request_refund.html", {"form": form, "ticket": ticket})

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <title>create refund request</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+    <style>
+      #id_ticket {
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- templates/pages/request_refund.html -->
+      <h1>Request Refund</h1>
+      <p>Event: {{ ticket.event.title }}</p>
+      <p>Date: {{ ticket.event.date }}</p>
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">Submit Refund Request</button>
+      </form>
+    </div>
+  </body>
+</html>

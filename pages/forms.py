@@ -62,10 +62,13 @@ class TicketForm(forms.ModelForm):
             self.fields['event'].initial = event  # Set the initial value for the event field
             self.fields['event'].widget = forms.HiddenInput()  # Hide the field
 
+
+
 class RefundRequestForm(forms.ModelForm):
     class Meta:
         model = RefundRequest
-        fields = ['ticket', 'status']
+        fields = []
+
 
 
 class CartForm(forms.ModelForm):

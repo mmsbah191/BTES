@@ -68,7 +68,7 @@ class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    purchase_date = models.DateTimeField(auto_now_add=True)
+    purchase_date= models.DateTimeField(auto_now_add=True)
     is_refunded = models.BooleanField(default=False)
 
     def purchase_ticket(self):
@@ -145,7 +145,7 @@ class RefundRequest(models.Model):
     request_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
-        choices=[("active", "Active"), ("cancelled", "Cancelled"), ("completed", "Completed")],
+        choices=[("pending", "Pending"), ("approved", "Approved"), ("rejected", "Rejected")],default="pending"
     )
     credit_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -161,7 +161,7 @@ class Cart(models.Model):
     
     _instance = None  
 
-    
+    #singletolen pattern
     def __new__(self,user):
         if self._instance is None: 
             self._instance =Cart.objects.get_or_create(user=user)[0]

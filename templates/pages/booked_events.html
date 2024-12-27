@@ -217,8 +217,13 @@
         <h2>{{ tic.event.price }}</h2>
         <p>{{ tic.event.date }}</p>
         <!-- هنا نحتاج إضاقة js   تعمل مع او بدون حسب برمجتك وتعديلاتك لكن تحتاج-->
+        <form action="{% url 'request_refund' tic.id %}" method="post">
+          {% csrf_token %}
+          <button>request_refund</button>
+        </form>
         <form action="{% url 'event_details' tic.event.id %}" method="post">
           {% csrf_token %}
+
           <button>details</button>
         </form>
       </div>
