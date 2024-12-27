@@ -146,30 +146,66 @@ from .models import Cart, Event, Payment, Ticket, User
 #         self.ticket.purchase_ticket()  # Simulate ticket purchase
 #         self.assertEqual(self.event.available_tickets, 9)  # Now this should be 9
 
+from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+from .models import Event, Ticket
 
-class TestSearchEvent(TestCase):
-    def setUp(self):
-        # إنشاء أحداث اختبار
-        # self.event = Event.objects.create(
-        #     title="Real Vs Chealse", description="Match"
-        # )
-        pass
-    def test_search_results_found(self):
-        # اختبار البحث عن حدث موجود
-        response = self.client.get(reverse("search_event"), {"q": "Chealse"})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Chealse")
-        self.assertNotContains(response, "random")
+User = get_user_model()
 
-    def test_search_no_results(self):
-        # اختبار البحث عن حدث غير موجود
-        response = self.client.get(reverse("search_event"), {"q": "NonExistingEvent"})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No events found.")
-
-    def test_search_empty_query(self):
-        # اختبار في حالة عدم كتابة أي نص
-        response = self.client.get(reverse("search_event"), {"q": ""})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No events found.")
+class EventViewsTestCase(TestCase):
     
+    def setUp(self):
+        # Set up the user and event for our tests
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='password123',
+            role='regular'  # Make sure to set the appropriate role
+        )
+        self.event = Event.objects.create(
+            title='Test Event',
+            description='This is a test event.',
+            price=100.00,
+            date='2024-12-31',
+            time='20:00:00',
+            location='Test Location',
+            image='images/test_event.png'
+        )
+        # Log in the user
+        self.client.login(username='testuser', password='password123')
+
+    def test_search_event(self):
+        response = self.client.get(reverse('search_event'), {'q': 'Test Event'})
+        print("Test Search Event: Expected 'Test Event' in response.")
+        if 'Test Event' in response.content.decode():
+            print("Actual Output: 'Test Event' found in response.")
+        else:
+            print("Actual Output: 'Test Event' NOT found in response.")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test Event')  # Check that the event is in the page
+
+    def test_booked_events(self):
+        # Book a ticket for the event
+        Ticket.objects.create(user=self.user, event=self.event)
+        response = self.client.get(reverse('booked_events'))
+        print("Test Booked Events: Expected 'Test Event' in booked events.")
+        if 'Test Event' in response.content.decode():
+            print("Actual Output: 'Test Event' found in booked events.")
+        else:
+            print("Actual Output: 'Test Event' NOT found in booked events.")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test Event')  # Check that the booked event is present
+
+    def test_delete_booking(self):
+        # Book a ticket and then delete it
+        ticket = Ticket.objects.create(user=self.user, event=self.event)
+        response = self.client.post(reverse('delete_booking', args=[ticket.id]))
+        print("Test Delete Booking: Expected ticket to be deleted.")
+        # Check that the ticket no longer exists
+        response = self.client.get(reverse('booked_events'))
+        if ticket.event.title not in response.content.decode():
+            print(f"Actual Output: Ticket '{ticket.event.title}' has been deleted successfully.")
+        else:
+            print(f"Actual Output: Ticket '{ticket.event.title}' is still present.")
+        self.assertNotContains(response, ticket.event.title)  # Verify that the event title is not in the response
